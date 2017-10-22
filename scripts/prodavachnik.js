@@ -64,9 +64,74 @@ function startApp() {
         showView('viewCreateAd');
     }
 
-↑
-Existing code here …
-↓
+    // user/login
+    function loginUser() {
+        const kinveyLoginUrl = kinveyBaseUrl + "user/" + kinveyAppKey + "/login";
+        const kinveyAuthHeaders = {
+            'Authorization': "Basic " + btoa(kinveyAppKey + ":" + kinveyAppSecret),
+        };
+        let userData = {
+            username: $('#formLogin input[name=username]').val(),
+            password: $('#formLogin input[name=passwd]').val()
+        };
+
+        $.ajax({
+            method: "POST",
+            url: kinveyLoginUrl,
+            headers: kinveyAuthHeaders,
+            data: userData,
+            success: loginSuccess
+        });
+
+        function loginSuccess(userInfo) {
+            saveAuthInSession(userInfo);
+            showHideMenuLinks();
+            listAdverts();
+        }
+    }
+
+    function saveAuthInSession(userInfo) {
+        let userAuth = userInfo._kmd.authtoken;
+        sessionStorage.setItem('authToken', userAuth);
+        let userId = userInfo._id;
+        sessionStorage.setItem('userId', userId);
+    }
+
+    // user/register
+    function registerUser() {
+        const kinveyRegisterUrl = kinveyBaseUrl + "user/" + kinveyAppKey + "/";
+        const kinveyAuthHeaders = {
+            'Authorization': "Basic " + btoa(kinveyAppKey + ":" + kinveyAppSecret),
+        };
+
+        let userData = {
+            username: $('#formRegister input[name=username]').val(),
+            password: $('#formRegister input[name=passwd]').val()
+        };
+
+        $.ajax({
+            method: "POST",
+            url: kinveyRegisterUrl,
+            headers: kinveyAuthHeaders,
+            data: userData,
+            success: registerSuccess
+        });
+
+        function registerSuccess(userInfo) {
+            console.log(userInfo);
+            saveAuthInSession(userInfo);
+            showHideMenuLinks();
+            listAdverts();
+        }
+    }
+
+    // user/logout
+    function logoutUser() {
+        sessionStorage.clear();
+        $('#loggedInUser').text("");
+        showHideMenuLinks();
+        showHomeView();
+    }
 
     // advertisement/all
     function listAdverts() {

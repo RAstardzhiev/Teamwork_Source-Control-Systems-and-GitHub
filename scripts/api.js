@@ -92,8 +92,8 @@
             };
         }
     });
-	
-	// Get user info
+
+    // Get user info
     $.mockjax(function (requestSettings) {
         if (requestSettings.url.match(/https:\/\/mock\.api\.com\/user\/kid_rk\/(.+)/)) {
             let userId = requestSettings.url.match(/https:\/\/mock\.api\.com\/user\/kid_rk\/(.+)/)[1];
@@ -127,8 +127,9 @@
             };
         }
     });
-	
-	// Create advert
+
+
+    // Create advert
     $.mockjax(function (requestSettings) {
         if (requestSettings.url === "https://mock.api.com/appdata/kid_rk/adverts" &&
             requestSettings.method === "POST") {
